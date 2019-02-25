@@ -1,13 +1,9 @@
-# images-search-experiment
+# services-edu-experiments
 
-A React project for experimenting with image search.  Uses https://github.com/kevinrobinson/services-edu to search a "custom search engine" for images.
+A React project for experimenting with using https://github.com/kevinrobinson/services-edu to do things like search for images, search for videos, send text messages, and reply to incoming text messages.
 
 ### Demo
-https://image-search-experiment.herokuapp.com/
-
-![dogs](docs/images2.png)
-
-![cats](docs/images1.png)
+...
 
 ## Getting started
 ### `npm start`
