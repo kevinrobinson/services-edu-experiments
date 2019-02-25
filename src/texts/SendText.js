@@ -29,9 +29,13 @@ export default class SendText extends Component {
   sendText() {
     const {number, message} = this.state;
     const domain = process.env.REACT_APP_DOMAIN || 'http://localhost:5000';
-    const headers = {'X-Services-Edu-Api-Key': 'abc'};
+    const headers = {
+      'X-Services-Edu-Api-Key': 'abc',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
     const url = `${domain}/texts/send`;
-    const body = {number, message};
+    const body = JSON.stringify({number, message});
     fetch(url, {headers, body, method: 'POST'})
       .then(response => response.json())
       .then(this.onFetchDone)
