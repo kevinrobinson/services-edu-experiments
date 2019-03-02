@@ -20,7 +20,7 @@ export default class ImageSearch extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.apiKey && prevState.query !== this.state.query) {
+    if (this.state.apiKey && prevState.query !== this.state.query && this.state.query !== '') {
       this.debouncedFetch();
     }
   }
