@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import _ from 'lodash';
 import {readApiKeyFromWindow, readDomainFromEnv} from '../config.js';
 import './ImageSearch.css';
@@ -8,33 +8,30 @@ export default class ImageSearch extends Component {
     super(props);
     this.state = {
       query: '',
-      error: null,
-      json: null,
       apiKey: readApiKeyFromWindow()
     };
 
     this.onQueryChange = this.onQueryChange.bind(this);
-    this.onFetchDone = this.onFetchDone.bind(this);
-    this.onFetchError = this.onFetchError.bind(this);
-    this.debouncedFetch = _.debounce(this.debouncedFetch, 100);
+    this.renderImagesJson = this.renderImagesJson.bind(this);
+    this.renderImagesError = this.renderImagesError.bind(this);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.apiKey && prevState.query !== this.state.query && this.state.query !== '') {
-      this.debouncedFetch();
-    }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.state.apiKey && prevState.query !== this.state.query && this.state.query !== '') {
+  //     this.debouncedFetch();
+  //   }
+  // }
 
-  debouncedFetch() {
-    const {query, apiKey} = this.state;
-    const domain = readDomainFromEnv();
-    const headers = {'X-Services-Edu-Api-Key': apiKey};
-    const url = `${domain}/images/search?q=${encodeURIComponent(query)}`;
-    fetch(url, {headers})
-      .then(response => response.json())
-      .then(this.onFetchDone)
-      .catch(this.onFetchError);
-  }
+  // debouncedFetch() {
+  //   const {query, apiKey} = this.state;
+  //   const domain = readDomainFromEnv();
+  //   const headers = {'X-Services-Edu-Api-Key': apiKey};
+  //   const url = `${domain}/images/search?q=${encodeURIComponent(query)}`;
+  //   fetch(url, {headers})
+  //     .then(response => response.json())
+  //     .then(this.onFetchDone)
+  //     .catch(this.onFetchError);
+  // }
 
   onQueryChange(e) {
     const query = e.target.value;
@@ -51,7 +48,6 @@ export default class ImageSearch extends Component {
 
   render() {
     const {apiKey} = this.state;
-
     return (
       <div className="ImageSearch">
         <header className="ImageSearch-header">
@@ -71,17 +67,25 @@ export default class ImageSearch extends Component {
   }
 
   renderSearch() {
-    const {error, json, query} = this.state;
+    const {apiKey, query} = this.state;
     return (
       <div>
         <div>search images: <input autoFocus={true} onChange={this.onQueryChange} type="text" value={query} /></div>
-        {json && this.renderJson(json)}
-        {error && <div>error: {JSON.stringify(error, null, 2)}</div>}
+        <ImagesWithHooks
+          query={query}
+          apiKey={apiKey}
+          renderImagesJson={this.renderImagesJson}
+          renderImagesError={this.renderImagesError}
+        />
       </div>
     );
   }
 
-  renderJson(json) {
+  renderImagesError(error) {
+    return <div>error: {JSON.stringify(error, null, 2)}</div>;
+  }
+
+  renderImagesJson(json) {
     return (
       <div>
         {json.items.map(item => (
@@ -101,4 +105,33 @@ export default class ImageSearch extends Component {
       </div>
     );
   }
+}
+
+
+function ImagesWithHooks(props = {}) {
+  const {apiKey, query, renderImagesError, renderImagesJson} = props;
+  const [json, setJson] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchImages({apiKey, query})
+      .then(response => response.json())
+      .then(setJson)
+      .catch(setError);
+  }, [query, apiKey]);
+
+  if (error) return renderImagesError(error);
+  if (json) return renderImagesJson(json);
+
+  return null;
+}
+
+
+function fetchImages({apiKey, query}) {
+  if (query === '') return Promise.resolve(null);
+
+  const domain = readDomainFromEnv();
+  const headers = {'X-Services-Edu-Api-Key': apiKey};
+  const url = `${domain}/images/search?q=${encodeURIComponent(query)}`;
+  return fetch(url, {headers});
 }
