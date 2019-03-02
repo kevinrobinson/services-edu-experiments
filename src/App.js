@@ -3,6 +3,7 @@ import {BrowserRouter, Route} from 'react-router-dom';
 import ImageSearch from './images/ImageSearch';
 import VideoSearch from './videos/VideoSearch';
 import SendTexts from './texts/SendText';
+import Translate from './translate/Translate';
 import './App.css';
 
 
@@ -15,6 +16,7 @@ export default class App extends Component {
           <Route exact path="/images" render={() => this.renderImages()} />
           <Route exact path="/videos" render={() => this.renderVideos()} />
           <Route exact path="/texts/send" render={() => this.renderSendTexts()} />
+          <Route exact path="/translate" render={() => this.renderTranslate()} />
         </div>
       </BrowserRouter>
     );
@@ -26,6 +28,7 @@ export default class App extends Component {
         <div>services-edu-experiments</div>
         <div><a href="/images">images</a></div>
         <div><a href="/videos">videos</a></div>
+        <div><a href="/translate">translations</a></div>
         <div><a href="/texts/send">send texts</a></div>
       </div>
     );
@@ -41,5 +44,9 @@ export default class App extends Component {
 
   renderSendTexts() {
     return <SendTexts />;
+  }
+
+  renderTranslate() {
+    return <Translate />;
   }
 }

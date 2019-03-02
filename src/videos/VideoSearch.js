@@ -35,7 +35,7 @@ export default class VideoSearch extends Component {
     const {query} = this.state;
     const domain = process.env.REACT_APP_DOMAIN || 'http://localhost:5000';
     const headers = {'X-Services-Edu-Api-Key': 'abc'};
-    const url = `${domain}/youtube/search?q=${query}`;
+    const url = `${domain}/youtube/search?q=${encodeURIComponent(query)}`;
     fetch(url, {headers})
       .then(response => response.json())
       .then(this.onFetchDone)

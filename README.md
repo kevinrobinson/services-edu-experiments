@@ -21,6 +21,12 @@ https://services-edu-experiments.herokuapp.com/texts/send
 
 ![texts](docs/texts1.png)
 
+### Translation
+https://services-edu-experiments.herokuapp.com/languages/translate
+
+![birthday](docs/translation1.png)
+
+
 ## Getting started
 ### `yarn start`
 
