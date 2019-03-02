@@ -13,19 +13,41 @@
   color: white;
 }
 
-
 .Translate-text {
   margin-bottom: 40px;
 }
 
 .Translate-text-input {
+  margin: 10px;
   font-size: 20px;
   padding: 10px;
-  width: 80%;
+  width: 90%;
 }
-
 
 .Translate-translated {
   color: orange;
   font-size: 24px;
+  height: 200px;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.Translate-language select {
+  font-size: 20px;
+}
+.Translate-language input {
+  font-size: 20px;
+  margin-left: 10px;
+  width: 100px;
+}
+
+.Translate-language a {
+  color: white;
+}
+
+.Translate-button {
+  margin-top: 40px;
+  padding: 10px;
+  font-size: 20px;
+  cursor: pointer;
 }

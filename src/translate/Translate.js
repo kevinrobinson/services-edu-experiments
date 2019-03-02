@@ -117,8 +117,11 @@ export default class Translate extends Component {
             value={code}
           />
         </div>
-        <button onClick={this.onTranslate}>translate!</button>
-        {json && this.renderJson(json)}
+        <button
+          className="Translate-button"
+          disabled={query === ''}
+          onClick={this.onTranslate}>translate!</button>
+        {this.renderJson(json)}
         {error && <div>error: {JSON.stringify(error, null, 2)}</div>}
       </div>
     );
@@ -127,7 +130,7 @@ export default class Translate extends Component {
   renderJson(json) {
     return (
       <div className="Translate-translated">
-        {json.data.translations[0].translatedText}
+        {json && json.data.translations[0].translatedText}
       </div>
     );
   }
