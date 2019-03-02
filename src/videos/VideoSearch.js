@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import qs from 'query-string';
+import {readApiKeyFromWindow, readDomainFromEnv} from '../config.js';
 import './VideoSearch.css';
 
 export default class VideoSearch extends Component {
@@ -10,19 +10,13 @@ export default class VideoSearch extends Component {
       query: '',
       error: null,
       json: null,
-      apiKey: null
+      apiKey: readApiKeyFromWindow()
     };
 
     this.onQueryChange = this.onQueryChange.bind(this);
     this.onFetchDone = this.onFetchDone.bind(this);
     this.onFetchError = this.onFetchError.bind(this);
     this.debouncedFetch = _.debounce(this.debouncedFetch, 100);
-  }
-
-  componentDidMount() {
-    const queryString = qs.parse(window.location.search);
-    const apiKey = queryString.api_key;
-    this.setState({apiKey});
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -32,9 +26,9 @@ export default class VideoSearch extends Component {
   }
 
   debouncedFetch() {
-    const {query} = this.state;
-    const domain = process.env.REACT_APP_DOMAIN || 'http://localhost:5000';
-    const headers = {'X-Services-Edu-Api-Key': 'abc'};
+    const {query, apiKey} = this.state;
+    const domain = readDomainFromEnv();
+    const headers = {'X-Services-Edu-Api-Key': apiKey};
     const url = `${domain}/youtube/search?q=${encodeURIComponent(query)}`;
     fetch(url, {headers})
       .then(response => response.json())

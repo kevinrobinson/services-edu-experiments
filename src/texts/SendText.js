@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import qs from 'query-string';
+import {readApiKeyFromWindow, readDomainFromEnv} from '../config.js';
 import './SendText.css';
 
 export default class SendText extends Component {
@@ -10,7 +10,7 @@ export default class SendText extends Component {
       message: '',
       error: null,
       json: null,
-      apiKey: null
+      apiKey: readApiKeyFromWindow()
     };
 
     this.onNumberChanged = this.onNumberChanged.bind(this);
@@ -20,17 +20,11 @@ export default class SendText extends Component {
     this.onFetchError = this.onFetchError.bind(this);
   }
 
-  componentDidMount() {
-    const queryString = qs.parse(window.location.search);
-    const apiKey = queryString.api_key;
-    this.setState({apiKey});
-  }
-
   sendText() {
-    const {number, message} = this.state;
-    const domain = process.env.REACT_APP_DOMAIN || 'http://localhost:5000';
+    const {number, message, apiKey} = this.state;
+    const domain = readDomainFromEnv();
     const headers = {
-      'X-Services-Edu-Api-Key': 'abc',
+      'X-Services-Edu-Api-Key': apiKey,
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     };
