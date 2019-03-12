@@ -1,52 +1,34 @@
-import React, { Component } from 'react';
-import {BrowserRouter, Route} from 'react-router-dom';
-import ImageSearch from './images/ImageSearch';
-import VideoSearch from './videos/VideoSearch';
-import SendTexts from './texts/SendText';
-import Translate from './translate/Translate';
+import React from 'react';
+import Routing from './Routing';
+import withFirebaseAuth from 'react-with-firebase-auth'
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import firebaseConfig from './firebaseConfig';
 import './App.css';
 
 
-export default class App extends Component {
-  render() {
-    return (
-      <BrowserRouter>
-        <div className="App">
-          <Route exact path="/" render={() => this.renderHello()} />
-          <Route exact path="/images" render={() => this.renderImages()} />
-          <Route exact path="/videos" render={() => this.renderVideos()} />
-          <Route exact path="/texts/send" render={() => this.renderSendTexts()} />
-          <Route exact path="/translate" render={() => this.renderTranslate()} />
-        </div>
-      </BrowserRouter>
-    );
-  }
-
-  renderHello() {
-    return (
-      <div>
-        <div>services-edu-experiments</div>
-        <div><a href="/images">images</a></div>
-        <div><a href="/videos">videos</a></div>
-        <div><a href="/translate">translations</a></div>
-        <div><a href="/texts/send">send texts</a></div>
-      </div>
-    );
-  }
-
-  renderImages() {
-    return <ImageSearch />;
-  }
-
-  renderVideos() {
-    return <VideoSearch />;
-  }
-
-  renderSendTexts() {
-    return <SendTexts />;
-  }
-
-  renderTranslate() {
-    return <Translate />;
-  }
+function App({user, signOut, signInWithGoogle}) {
+  return (
+    <div className="app">
+      <Routing user={user} signOut={signOut} signInWithGoogle={signInWithGoogle} />
+    </div>
+  );
 }
+
+// function wrappedWithFirebaseConfig(component) {
+//   const firebaseApp = firebase.initializeApp(firebaseConfig);
+//   const firebaseAppAuth = firebaseApp.auth();
+//   const providers = {
+//     googleProvider: new firebase.auth.GoogleAuthProvider(),
+//   };
+//   return withFirebaseAuth({providers,firebaseAppAuth});
+// }
+
+// export default wrappedWithFirebaseConfig(App);
+
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+const firebaseAppAuth = firebaseApp.auth();
+const providers = {
+  googleProvider: new firebase.auth.GoogleAuthProvider(),
+};
+export default withFirebaseAuth({providers,firebaseAppAuth})(App);
