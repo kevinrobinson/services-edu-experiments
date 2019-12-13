@@ -82,6 +82,7 @@ export default class VideoSearch extends Component {
   }
 
   renderJson(json) {
+    if (!json.items) return;
     return (
       <div>
         {json.items.map(item => (
